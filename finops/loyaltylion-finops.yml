@@ -1,0 +1,91 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: LoyaltyLion
+providerId: loyaltylion
+created: '2026-07-10'
+modified: '2026-07-10'
+reconciled: false
+tags:
+- Loyalty
+- Rewards
+- E-commerce
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of LoyaltyLion spend. LoyaltyLion is a commercial SaaS loyalty
+  platform billed on a subscription tied to average monthly order volume, not on
+  API calls. Cost drivers are the plan tier (Free, Classic from $199/month, and
+  custom Advanced/Plus) plus order-volume growth that pushes a store into a higher
+  tier, and any add-ons (advanced widget styling, additional integrations, custom
+  email templates). The v2 API and Headless API are included platform capabilities
+  rather than a separately metered line item, so API usage itself does not
+  generate incremental charges beyond the subscription.
+notes: >-
+  Per-tier rates above Classic are custom-quoted and not reconciled here; verify
+  on the LoyaltyLion pricing page. Model spend against monthly order volume, which
+  is the primary billing dimension.
+sources:
+- https://loyaltylion.com/pricing
+- https://loyaltylion.com/pricing/features-table
+- https://developers.loyaltylion.com/api-reference/introduction
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: LoyaltyLion
+serviceCategory: Marketing and Loyalty
+billingModel:
+  pricingCategory: Subscription-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Purchase
+  - Usage
+  - Adjustment
+focusColumns:
+  ServiceName: LoyaltyLion
+  ServiceCategory: Marketing and Loyalty
+  ProviderName: LoyaltyLion
+  PublisherName: LoyaltyLion
+  InvoiceIssuerName: LoyaltyLion
+  BillingCurrency: USD
+  ChargeCategory: Purchase
+  PricingCategory: Subscription-Based
+meters:
+- name: monthly_subscription
+  description: Recurring plan fee tied to the store's plan tier and monthly order band.
+  unit: subscription
+  aggregation: sum
+  dimensions:
+  - account
+  - plan
+- name: monthly_orders
+  description: Average orders processed per month; the primary dimension that sizes the plan.
+  unit: orders
+  aggregation: sum
+  dimensions:
+  - account
+  - site
+- name: addons
+  description: Optional paid add-ons such as advanced styling, extra integrations, or custom email templates.
+  unit: items
+  aggregation: sum
+  dimensions:
+  - account
+principles:
+- name: Visibility
+  description: Track monthly order volume against your plan's included band so tier upgrades are anticipated, not surprising.
+- name: Allocation
+  description: Attribute the LoyaltyLion subscription and add-ons to the retention/marketing cost center that owns the loyalty program.
+- name: Optimization
+  description: Right-size the plan to actual order volume, and confirm which add-ons are genuinely used before renewing.
+- name: Accountability
+  description: Assign a program owner to review the monthly invoice, order trend, and add-on spend against expected loyalty ROI.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

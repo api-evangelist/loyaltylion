@@ -1,0 +1,52 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: LoyaltyLion
+providerId: loyaltylion
+created: '2026-07-10'
+modified: '2026-07-10'
+reconciled: false
+tags:
+- Loyalty
+- Rewards
+- E-commerce
+- Rate Limiting
+- Quotas
+description: >-
+  LoyaltyLion documents a single published rate limit for its v2 API - 20
+  requests per second across all endpoints unless otherwise stated. This is a
+  request-rate cap applied to the authenticated program/API key rather than a
+  per-endpoint quota. Beyond the request rate, effective throughput is shaped by
+  your LoyaltyLion plan (which is sized by monthly order volume) rather than by a
+  separate API call quota.
+notes: >-
+  The 20 requests-per-second figure is taken from the LoyaltyLion API
+  introduction. Individual endpoints may carry stricter limits where noted in the
+  reference. Clients should back off on 429 responses and honor any Retry-After
+  header.
+sources:
+- https://developers.loyaltylion.com/api-reference/introduction
+- https://developers.loyaltylion.com/api-reference/pagination
+responseCodes:
+  throttled: 429
+limits:
+- name: Global Request Rate
+  scope: api-key
+  metric: requests
+  limit: 20 per second
+  notes: Applies to all endpoints unless otherwise stated.
+- name: Page Size
+  scope: request
+  metric: records
+  limit: 500 max per page (default 100)
+  notes: The limit query parameter caps results per request; use cursors to page.
+policies:
+- name: Backoff Strategy
+  description: On a 429 response, back off with exponential delay and jitter and honor any Retry-After header before retrying.
+- name: Cursor Pagination
+  description: Use the cursor returned in each response to page through large result sets rather than the deprecated page parameter.
+- name: Scoped Keys
+  description: Program API keys carry scopes (for example read_customers); requests outside a key's scope are rejected rather than throttled.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,112 @@
+aid: loyaltylion
+name: LoyaltyLion
+review:
+  question: Does LoyaltyLion expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-10'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. LoyaltyLion's public developer surface is a
+    v2 REST API (base https://api.loyaltylion.com/v2) that is entirely
+    request/response over HTTPS. There is no server-push transport (WebSocket or
+    SSE) on LoyaltyLion's own API to model. Asynchronous, event-driven delivery is
+    provided instead by outbound webhooks: merchants register HTTP callback URLs
+    via the Webhooks resource and LoyaltyLion POSTs loyalty events to them. Those
+    are server-to-endpoint HTTP callbacks, not a WebSocket, and carry no ws:// or
+    wss:// surface.
+findings:
+  summary: |
+    LoyaltyLion does not publish a documented public WebSocket API. LoyaltyLion is
+    an e-commerce loyalty and rewards platform. Its public API is a v2 REST API at
+    base https://api.loyaltylion.com/v2, split into an Admin API (moving data in and
+    out of LoyaltyLion - customers, activities, transactions, orders, points) and a
+    Headless API (building custom shopper-facing loyalty UIs). Requests are
+    authenticated with a Program API key sent as a Bearer token in the Authorization
+    header (scoped, e.g. read_customers), or with the deprecated token/secret pair
+    over HTTP Basic auth (supported only until 2027-01-10). All endpoints are
+    request/response REST over HTTPS and share a documented rate limit of 20
+    requests per second. Event delivery is handled by outbound webhooks, not a
+    realtime bidirectional WebSocket. No ws:// or wss:// endpoint is documented
+    anywhere in the LoyaltyLion API reference as of the review date.
+  accessModel: |
+    LoyaltyLion is a commercial SaaS platform (not open source). API access is tied
+    to a paid LoyaltyLion program: keys are generated per program in the LoyaltyLion
+    admin, and full/headless API capabilities are generally associated with higher
+    plan tiers. Pricing is based on average monthly order volume (Free up to ~400
+    orders/month, Classic from $199/month, plus custom Advanced and Plus tiers).
+    Exact plan-to-API-scope mapping is not fully published and should be confirmed
+    with LoyaltyLion.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.loyaltylion.com/v2
+      documented: true
+      note: Admin API and Headless API. Request/response JSON over HTTPS.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: Merchants register callback URLs via the Webhooks resource; LoyaltyLion POSTs loyalty events to them. Server-to-endpoint HTTP, not WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented anywhere in the LoyaltyLion API reference as of the review date.
+  endpointsConfirmedRest:
+    - GET    https://api.loyaltylion.com/v2/whoami
+    - GET    https://api.loyaltylion.com/v2/customers
+    - PUT    https://api.loyaltylion.com/v2/customers/{merchant_id}
+    - GET    https://api.loyaltylion.com/v2/customers/{merchant_id}/transactions
+    - POST   https://api.loyaltylion.com/v2/customers/{merchant_id}/points
+    - POST   https://api.loyaltylion.com/v2/customers/{merchant_id}/remove_points
+    - GET    https://api.loyaltylion.com/v2/customers/{merchant_id}/available_rewards
+    - POST   https://api.loyaltylion.com/v2/customers/{merchant_id}/claimed_rewards
+    - POST   https://api.loyaltylion.com/v2/customers/{merchant_id}/claimed_rewards/{claimed_reward_id}/refund
+    - POST   https://api.loyaltylion.com/v2/activities
+    - GET    https://api.loyaltylion.com/v2/activities
+    - PUT    https://api.loyaltylion.com/v2/activities/{merchant_id}
+    - GET    https://api.loyaltylion.com/v2/transactions
+    - POST   https://api.loyaltylion.com/v2/rewards/{reward_id}/enable
+    - POST   https://api.loyaltylion.com/v2/rewards/{reward_id}/disable
+    - GET    https://api.loyaltylion.com/v2/sites
+    - GET    https://api.loyaltylion.com/v2/webhooks
+    - POST   https://api.loyaltylion.com/v2/webhooks
+    - DELETE https://api.loyaltylion.com/v2/webhooks/{id}
+  endpointNotes: |
+    Method and path for List Customers, Add Points, Remove Points, Create Activity,
+    List/Get Transactions, List Available Rewards, Redeem Reward (claimed_rewards),
+    and Refund Reward were confirmed directly against the LoyaltyLion API reference.
+    Update Customer (PUT /customers/{merchant_id}), Update Activity
+    (PUT /activities/{merchant_id}), and Enable/Disable Reward paths are
+    honestly modeled from the documented resource index; verify exact HTTP verbs
+    against the live reference before production use.
+sources:
+  - url: https://developers.loyaltylion.com/api-reference/introduction
+    type: Documentation
+    note: Admin API vs Headless API overview, base host api.loyaltylion.com, 20 req/sec rate limit. All REST.
+  - url: https://developers.loyaltylion.com/api-reference/authentication/api-keys
+    type: Documentation
+    note: Program API keys passed as Bearer token in Authorization header, scoped access.
+  - url: https://developers.loyaltylion.com/api-reference/authentication/token-secret
+    type: Documentation
+    note: Deprecated token/secret over HTTP Basic auth (RFC2617); supported until 2027-01-10.
+  - url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+    type: APIReference
+    note: GET /v2/customers with cursor pagination and email/date filters.
+  - url: https://developers.loyaltylion.com/api-reference/v2/resources/transactions/list-transactions
+    type: APIReference
+    note: GET /v2/transactions; each transaction is an immutable add/remove of points.
+  - url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
+    type: APIReference
+    note: POST /v2/customers/{merchant_id}/claimed_rewards to redeem; refund nested under claimed_rewards.
+  - url: https://developers.loyaltylion.com/api-reference/v2/resources/webhooks/create-webhook
+    type: APIReference
+    note: Outbound webhooks are the async delivery mechanism. No WebSocket.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists. LoyaltyLion's public API is
+    request/response REST (Admin and Headless APIs), and asynchronous event
+    delivery is handled by outbound HTTP webhooks rather than a server-push
+    WebSocket transport. No AsyncAPI document was created because there is no
+    ws:// or wss:// surface on LoyaltyLion's own API to model.

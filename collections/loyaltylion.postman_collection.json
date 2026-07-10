@@ -1,0 +1,191 @@
+{
+  "info": {
+    "name": "LoyaltyLion API",
+    "description": "The LoyaltyLion v2 REST API for an e-commerce loyalty and rewards program - Admin API (customers, activities, transactions, points) and Headless API (custom shopper-facing experiences). Base URL: https://api.loyaltylion.com/v2. Authenticate with a Program API key as a Bearer token, or the deprecated token/secret over HTTP Basic auth. Rate limit: 20 requests per second.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{apiKey}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.loyaltylion.com/v2", "type": "string" },
+    { "key": "apiKey", "value": "", "type": "string" },
+    { "key": "merchant_id", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "List customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/customers?limit=100", "host": ["{{baseUrl}}"], "path": ["customers"], "query": [{ "key": "limit", "value": "100" }, { "key": "email", "value": "", "disabled": true }, { "key": "cursor", "value": "", "disabled": true }] },
+            "description": "Lists loyalty customers with cursor pagination and email/date filters. Requires the read_customers scope."
+          }
+        },
+        {
+          "name": "Update a customer",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"date_of_birth\": \"1990-01-01\"\n}" },
+            "url": { "raw": "{{baseUrl}}/customers/:merchant_id", "host": ["{{baseUrl}}"], "path": ["customers", ":merchant_id"], "variable": [{ "key": "merchant_id", "value": "{{merchant_id}}" }] },
+            "description": "Updates a loyalty customer. Verify the exact verb against the live reference."
+          }
+        },
+        {
+          "name": "List a customer's transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/customers/:merchant_id/transactions", "host": ["{{baseUrl}}"], "path": ["customers", ":merchant_id", "transactions"], "variable": [{ "key": "merchant_id", "value": "{{merchant_id}}" }] },
+            "description": "Lists the immutable point transactions for a single customer."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Activities",
+      "item": [
+        {
+          "name": "Create an activity",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"signup\",\n  \"customer_id\": \"12345\",\n  \"customer_email\": \"shopper@example.com\",\n  \"guest\": false\n}" },
+            "url": { "raw": "{{baseUrl}}/activities", "host": ["{{baseUrl}}"], "path": ["activities"] },
+            "description": "Records a customer activity against a built-in or custom loyalty rule to award points."
+          }
+        },
+        {
+          "name": "List activities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/activities?limit=100", "host": ["{{baseUrl}}"], "path": ["activities"], "query": [{ "key": "limit", "value": "100" }] },
+            "description": "Lists customer activities recorded against loyalty rules."
+          }
+        },
+        {
+          "name": "Update an activity",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"state\": \"void\"\n}" },
+            "url": { "raw": "{{baseUrl}}/activities/:merchant_id", "host": ["{{baseUrl}}"], "path": ["activities", ":merchant_id"], "variable": [{ "key": "merchant_id", "value": "{{merchant_id}}" }] },
+            "description": "Updates an activity previously created with a merchant_id. Verify the exact verb against the live reference."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Points",
+      "item": [
+        {
+          "name": "Add points to a customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"points\": 100,\n  \"reason\": \"Thanks for being a loyal customer\"\n}" },
+            "url": { "raw": "{{baseUrl}}/customers/:merchant_id/points", "host": ["{{baseUrl}}"], "path": ["customers", ":merchant_id", "points"], "variable": [{ "key": "merchant_id", "value": "{{merchant_id}}" }] },
+            "description": "Manually adds points to a customer's balance with an optional shopper-visible reason."
+          }
+        },
+        {
+          "name": "Remove points from a customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"points\": 50,\n  \"reason\": \"Adjustment\"\n}" },
+            "url": { "raw": "{{baseUrl}}/customers/:merchant_id/remove_points", "host": ["{{baseUrl}}"], "path": ["customers", ":merchant_id", "remove_points"], "variable": [{ "key": "merchant_id", "value": "{{merchant_id}}" }] },
+            "description": "Manually removes points from a customer's balance with an optional shopper-visible reason."
+          }
+        },
+        {
+          "name": "List transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/transactions?limit=100", "host": ["{{baseUrl}}"], "path": ["transactions"], "query": [{ "key": "limit", "value": "100" }, { "key": "customer_id", "value": "", "disabled": true }] },
+            "description": "Lists point transactions across the program. Each transaction is an immutable add/remove of points."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rewards",
+      "item": [
+        {
+          "name": "List available rewards for a customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/customers/:merchant_id/available_rewards", "host": ["{{baseUrl}}"], "path": ["customers", ":merchant_id", "available_rewards"], "variable": [{ "key": "merchant_id", "value": "{{merchant_id}}" }] },
+            "description": "Lists the rewards a given customer can currently claim, optionally filtered by site and country."
+          }
+        },
+        {
+          "name": "Enable a reward",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/rewards/:reward_id/enable", "host": ["{{baseUrl}}"], "path": ["rewards", ":reward_id", "enable"], "variable": [{ "key": "reward_id", "value": "" }] },
+            "description": "Enables a reward in the program catalog. Verb and path modeled from the documented resource index; verify against the live reference."
+          }
+        },
+        {
+          "name": "Disable a reward",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/rewards/:reward_id/disable", "host": ["{{baseUrl}}"], "path": ["rewards", ":reward_id", "disable"], "variable": [{ "key": "reward_id", "value": "" }] },
+            "description": "Disables a reward in the program catalog. Verb and path modeled from the documented resource index; verify against the live reference."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Redemptions",
+      "item": [
+        {
+          "name": "Redeem a reward",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reward_id\": 6789\n}" },
+            "url": { "raw": "{{baseUrl}}/customers/:merchant_id/claimed_rewards", "host": ["{{baseUrl}}"], "path": ["customers", ":merchant_id", "claimed_rewards"], "variable": [{ "key": "merchant_id", "value": "{{merchant_id}}" }] },
+            "description": "Redeems a reward on behalf of a customer, spending their points to create a claimed reward."
+          }
+        },
+        {
+          "name": "Refund a claimed reward",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/customers/:merchant_id/claimed_rewards/:claimed_reward_id/refund", "host": ["{{baseUrl}}"], "path": ["customers", ":merchant_id", "claimed_rewards", ":claimed_reward_id", "refund"], "variable": [{ "key": "merchant_id", "value": "{{merchant_id}}" }, { "key": "claimed_reward_id", "value": "" }] },
+            "description": "Refunds a previously claimed reward, returning the spent points to the customer."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Utility",
+      "item": [
+        {
+          "name": "Who am I",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/whoami", "host": ["{{baseUrl}}"], "path": ["whoami"] },
+            "description": "Returns the identity and scopes associated with the authenticated API key."
+          }
+        }
+      ]
+    }
+  ]
+}

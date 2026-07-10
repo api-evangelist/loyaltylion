@@ -1,0 +1,129 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: LoyaltyLion
+providerId: loyaltylion
+created: '2026-07-10'
+modified: '2026-07-10'
+reconciled: false
+tags:
+- Loyalty
+- Rewards
+- E-commerce
+- Points
+- Plans
+description: >-
+  LoyaltyLion is a commercial SaaS loyalty platform priced on the average number
+  of orders a store processes per month, not on API usage directly. There is a
+  free tier for low-volume stores, a published Classic tier starting at $199 per
+  month, and custom-priced Advanced and Plus tiers for higher volumes and
+  additional capabilities (VIP tiers, advanced POS, enhanced support). The v2 API
+  and Headless API are platform features associated with a paid program rather
+  than a separately metered product; the exact plan-to-API-scope mapping is not
+  fully published. API keys are generated per program in the LoyaltyLion admin.
+notes: >-
+  Prices captured from the LoyaltyLion pricing page as of 2026-07-10 and may
+  change. Advanced and Plus are custom-quoted. Confirm which plan tiers include
+  full Admin/Headless API access, and any add-on costs, directly with LoyaltyLion.
+sources:
+- https://loyaltylion.com/pricing
+- https://loyaltylion.com/pricing/features-table
+- https://developers.loyaltylion.com/api-reference/introduction
+plans:
+- id: loyaltylion-free
+  name: Free
+  type: free
+  description: >-
+    Free tier recommended for stores processing roughly 400 orders per month or
+    fewer, with the core features needed to launch a simple loyalty program.
+  entries:
+  - label: Included Orders
+    name: free_orders
+    type: usage
+    metric: orders
+    limit: 400
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free up to the order allowance
+    userMultiplied: false
+  elements:
+  - name: Points and Rewards
+  - name: Basic Program Features
+- id: loyaltylion-classic
+  name: Classic
+  type: paid
+  description: >-
+    Entry paid tier for brands starting loyalty with minimal effort, including
+    dedicated onboarding support. Published starting price of $199 per month for
+    500 orders per month.
+  entries:
+  - label: Monthly Subscription
+    name: classic_monthly
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: from $199 per month
+    userMultiplied: false
+  - label: Included Orders
+    name: classic_orders
+    type: usage
+    metric: orders
+    limit: 500
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included in base; overage scales with volume
+    userMultiplied: false
+  elements:
+  - name: Points and Rewards
+  - name: Referrals
+  - name: Dedicated Onboarding
+- id: loyaltylion-advanced
+  name: Advanced
+  type: paid
+  description: >-
+    Custom-priced tier for growing brands, adding VIP tiers and enhanced POS
+    capabilities. Price scales with monthly order volume.
+  entries:
+  - label: Custom Subscription
+    name: advanced_monthly
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: custom (contact sales)
+    userMultiplied: false
+  elements:
+  - name: VIP Tiers
+  - name: Enhanced POS
+  - name: Advanced Program Features
+- id: loyaltylion-plus
+  name: Plus
+  type: enterprise
+  description: >-
+    Custom-priced tier for high-volume brands (roughly 10,000+ orders per month)
+    needing advanced functionality, scalability, and premium support.
+  entries:
+  - label: Enterprise Subscription
+    name: plus_monthly
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: custom (contact sales)
+    userMultiplied: false
+  elements:
+  - name: High Order Volume
+  - name: Advanced Functionality
+  - name: Premium Support
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

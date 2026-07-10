@@ -1,0 +1,216 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LoyaltyLion API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{apiKey}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Customers", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List customers.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/customers",
+            "params": [
+              { "name": "limit", "value": "100", "type": "query", "description": "Maximum results per request (1-500)." },
+              { "name": "email", "value": "", "type": "query", "description": "Filter by email substring match." },
+              { "name": "cursor", "value": "", "type": "query", "description": "Pagination cursor from a previous response." }
+            ]
+          },
+          "docs": "Lists loyalty customers with cursor pagination. Requires the read_customers scope."
+        },
+        {
+          "info": { "name": "Update a customer.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id",
+            "params": [
+              { "name": "merchant_id", "value": "", "type": "path", "description": "The ID of the customer in your platform." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"date_of_birth\": \"1990-01-01\"\n}" }
+          },
+          "docs": "Updates a loyalty customer. Verify the exact verb against the live reference."
+        },
+        {
+          "info": { "name": "List a customer's transactions.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/transactions",
+            "params": [
+              { "name": "merchant_id", "value": "", "type": "path", "description": "The ID of the customer in your platform." }
+            ]
+          },
+          "docs": "Lists the immutable point transactions for a single customer."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Activities", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create an activity.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/activities",
+            "body": { "type": "json", "data": "{\n  \"name\": \"signup\",\n  \"customer_id\": \"12345\",\n  \"customer_email\": \"shopper@example.com\",\n  \"guest\": false\n}" }
+          },
+          "docs": "Records a customer activity against a built-in or custom loyalty rule to award points."
+        },
+        {
+          "info": { "name": "List activities.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/activities",
+            "params": [
+              { "name": "limit", "value": "100", "type": "query", "description": "Maximum results per request." }
+            ]
+          },
+          "docs": "Lists customer activities recorded against loyalty rules."
+        },
+        {
+          "info": { "name": "Update an activity.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.loyaltylion.com/v2/activities/:merchant_id",
+            "params": [
+              { "name": "merchant_id", "value": "", "type": "path", "description": "Your own identifier for the activity." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"state\": \"void\"\n}" }
+          },
+          "docs": "Updates an activity previously created with a merchant_id. Verify the exact verb against the live reference."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Points", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Add points to a customer.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/points",
+            "params": [
+              { "name": "merchant_id", "value": "", "type": "path", "description": "The ID of the customer in your platform." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"points\": 100,\n  \"reason\": \"Thanks for being a loyal customer\"\n}" }
+          },
+          "docs": "Manually adds points to a customer's balance with an optional shopper-visible reason."
+        },
+        {
+          "info": { "name": "Remove points from a customer.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/remove_points",
+            "params": [
+              { "name": "merchant_id", "value": "", "type": "path", "description": "The ID of the customer in your platform." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"points\": 50,\n  \"reason\": \"Adjustment\"\n}" }
+          },
+          "docs": "Manually removes points from a customer's balance with an optional shopper-visible reason."
+        },
+        {
+          "info": { "name": "List transactions.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/transactions",
+            "params": [
+              { "name": "limit", "value": "100", "type": "query", "description": "Maximum results per request." },
+              { "name": "customer_id", "value": "", "type": "query", "description": "Filter by LoyaltyLion customer ID." }
+            ]
+          },
+          "docs": "Lists point transactions across the program. Each transaction is an immutable add/remove of points."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Rewards", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List available rewards for a customer.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/available_rewards",
+            "params": [
+              { "name": "merchant_id", "value": "", "type": "path", "description": "The ID of the customer in your platform." },
+              { "name": "site_id", "value": "", "type": "query", "description": "Filter rewards by a specific site." },
+              { "name": "country", "value": "", "type": "query", "description": "ISO 3166-1 alpha-2 country code." }
+            ]
+          },
+          "docs": "Lists the rewards a given customer can currently claim, optionally filtered by site and country."
+        },
+        {
+          "info": { "name": "Enable a reward.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/rewards/:reward_id/enable",
+            "params": [
+              { "name": "reward_id", "value": "", "type": "path", "description": "The ID of the reward in the program catalog." }
+            ]
+          },
+          "docs": "Enables a reward in the program catalog. Verb and path modeled from the documented resource index; verify against the live reference."
+        },
+        {
+          "info": { "name": "Disable a reward.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/rewards/:reward_id/disable",
+            "params": [
+              { "name": "reward_id", "value": "", "type": "path", "description": "The ID of the reward in the program catalog." }
+            ]
+          },
+          "docs": "Disables a reward in the program catalog. Verb and path modeled from the documented resource index; verify against the live reference."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Redemptions", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Redeem a reward.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/claimed_rewards",
+            "params": [
+              { "name": "merchant_id", "value": "", "type": "path", "description": "The ID of the customer in your platform." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"reward_id\": 6789\n}" }
+          },
+          "docs": "Redeems a reward on behalf of a customer, spending their points to create a claimed reward."
+        },
+        {
+          "info": { "name": "Refund a claimed reward.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/claimed_rewards/:claimed_reward_id/refund",
+            "params": [
+              { "name": "merchant_id", "value": "", "type": "path", "description": "The ID of the customer in your platform." },
+              { "name": "claimed_reward_id", "value": "", "type": "path", "description": "The ID of the claimed reward to refund." }
+            ]
+          },
+          "docs": "Refunds a previously claimed reward, returning the spent points to the customer."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Utility", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Who am I.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/whoami"
+          },
+          "docs": "Returns the identity and scopes associated with the authenticated API key."
+        }
+      ]
+    }
+  ]
+}
