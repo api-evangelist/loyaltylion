@@ -113,6 +113,10 @@ apis:
     create a claimed reward - and refund a previously claimed reward to return the
     points, supporting multipliers, variants, and headless session attribution.
 common:
+- type: DomainSecurity
+  url: security/loyaltylion-domain-security.yml
+- type: Authentication
+  url: authentication/loyaltylion-authentication.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/loyaltylion
 - type: Website

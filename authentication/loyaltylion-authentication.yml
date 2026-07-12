@@ -1,0 +1,20 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/loyaltylion-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: Program API key passed as a Bearer token in the Authorization header.
+  sources:
+  - openapi/loyaltylion-openapi.yml
+- name: basicAuth
+  type: http
+  scheme: basic
+  description: Deprecated token (username) and secret (password) over HTTP Basic auth, supported
+    until 2027-01-10.
+  sources:
+  - openapi/loyaltylion-openapi.yml
