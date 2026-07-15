@@ -113,6 +113,8 @@ apis:
     create a claimed reward - and refund a previously claimed reward to return the
     points, supporting multipliers, variants, and headless session attribution.
 common:
+- type: AgenticAccess
+  url: agentic-access/loyaltylion-agentic-access.yml
 - type: DomainSecurity
   url: security/loyaltylion-domain-security.yml
 - type: Authentication
