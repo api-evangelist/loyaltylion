@@ -1,0 +1,208 @@
+openapi: 3.0.3
+info:
+  title: LoyaltyLion Activities Customers API
+  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program. It is split into an Admin API - for moving data in and out of LoyaltyLion, such as retrieving customers and transactions, tracking orders, and adjusting points - and a Headless API for building custom shopper-facing loyalty experiences in web, mobile, and POS applications. Requests authenticate with a Program API key passed as a Bearer token in the Authorization header (with scoped access such as read_customers), or the deprecated token/secret pair over HTTP Basic auth (supported until 2027-01-10). Customers are addressed by the merchant_id you use in your own platform. All endpoints share a rate limit of 20 requests per second unless otherwise stated. This document grounds the core Customers, Activities, Points, Rewards, and Redemptions resources; some verbs are modeled from the documented resource index and should be verified against the live reference.
+  version: '2.0'
+  contact:
+    name: LoyaltyLion
+    url: https://developers.loyaltylion.com
+servers:
+- url: https://api.loyaltylion.com/v2
+  description: LoyaltyLion v2 API
+security:
+- bearerAuth: []
+- basicAuth: []
+tags:
+- name: Customers
+  description: Loyalty customer profiles, points balances, tiers, and referrals.
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      tags:
+      - Customers
+      summary: List customers
+      description: Lists loyalty customers. Supports cursor pagination and filtering by email substring and created/updated date ranges. Requires a key with the read_customers scope.
+      parameters:
+      - name: since_id
+        in: query
+        schema:
+          type: integer
+        description: Return resources with an ID greater than this value.
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+        description: Maximum results per request.
+      - name: cursor
+        in: query
+        schema:
+          type: string
+        description: Pagination cursor from a previous response.
+      - name: sort_field
+        in: query
+        schema:
+          type: string
+          enum:
+          - id
+          - updated_at
+      - name: sort_direction
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: email
+        in: query
+        schema:
+          type: string
+        description: Filter by email substring match.
+      - name: created_at_min
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: created_at_max
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_min
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: updated_at_max
+        in: query
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: A paginated list of customers.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Customer'
+                  cursors:
+                    $ref: '#/components/schemas/Cursors'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{merchant_id}:
+    parameters:
+    - $ref: '#/components/parameters/MerchantId'
+    put:
+      operationId: updateCustomer
+      tags:
+      - Customers
+      summary: Update a customer
+      description: Updates a loyalty customer, for example setting their date of birth or other profile attributes. Verify the exact verb against the live reference.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+      responses:
+        '200':
+          description: The updated customer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed or the API key lacks the required scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    Cursors:
+      type: object
+      properties:
+        next:
+          type: string
+          nullable: true
+        previous:
+          type: string
+          nullable: true
+    CustomerInput:
+      type: object
+      properties:
+        date_of_birth:
+          type: string
+          format: date
+        merchant_id:
+          type: string
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+        merchant_id:
+          type: string
+        email:
+          type: string
+          format: email
+        points_approved:
+          type: integer
+        points_pending:
+          type: integer
+        points_spent:
+          type: integer
+        loyalty_tier_membership:
+          type: object
+          additionalProperties: true
+        referral_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  parameters:
+    MerchantId:
+      name: merchant_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the customer in your platform or e-commerce store.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Program API key passed as a Bearer token in the Authorization header.
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Deprecated token (username) and secret (password) over HTTP Basic auth, supported until 2027-01-10.

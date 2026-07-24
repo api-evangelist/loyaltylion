@@ -1,0 +1,247 @@
+openapi: 3.0.3
+info:
+  title: LoyaltyLion Activities Points API
+  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program. It is split into an Admin API - for moving data in and out of LoyaltyLion, such as retrieving customers and transactions, tracking orders, and adjusting points - and a Headless API for building custom shopper-facing loyalty experiences in web, mobile, and POS applications. Requests authenticate with a Program API key passed as a Bearer token in the Authorization header (with scoped access such as read_customers), or the deprecated token/secret pair over HTTP Basic auth (supported until 2027-01-10). Customers are addressed by the merchant_id you use in your own platform. All endpoints share a rate limit of 20 requests per second unless otherwise stated. This document grounds the core Customers, Activities, Points, Rewards, and Redemptions resources; some verbs are modeled from the documented resource index and should be verified against the live reference.
+  version: '2.0'
+  contact:
+    name: LoyaltyLion
+    url: https://developers.loyaltylion.com
+servers:
+- url: https://api.loyaltylion.com/v2
+  description: LoyaltyLion v2 API
+security:
+- bearerAuth: []
+- basicAuth: []
+tags:
+- name: Points
+  description: Manual point adjustments and immutable point transactions.
+paths:
+  /customers/{merchant_id}/transactions:
+    parameters:
+    - $ref: '#/components/parameters/MerchantId'
+    get:
+      operationId: listCustomerTransactions
+      tags:
+      - Points
+      summary: List a customer's point transactions
+      description: Lists the immutable point transactions for a single customer.
+      parameters:
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: A paginated list of point transactions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+                  cursors:
+                    $ref: '#/components/schemas/Cursors'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{merchant_id}/points:
+    parameters:
+    - $ref: '#/components/parameters/MerchantId'
+    post:
+      operationId: addPoints
+      tags:
+      - Points
+      summary: Add points to a customer
+      description: Manually adds points to a customer's balance with an optional shopper-visible reason.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PointsAdjustment'
+      responses:
+        '200':
+          description: Points added.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /customers/{merchant_id}/remove_points:
+    parameters:
+    - $ref: '#/components/parameters/MerchantId'
+    post:
+      operationId: removePoints
+      tags:
+      - Points
+      summary: Remove points from a customer
+      description: Manually removes points from a customer's balance with an optional shopper-visible reason.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PointsAdjustment'
+      responses:
+        '200':
+          description: Points removed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /transactions:
+    get:
+      operationId: listTransactions
+      tags:
+      - Points
+      summary: List transactions
+      description: Lists point transactions across the program. Each transaction is an immutable addition or removal of points from a customer.
+      parameters:
+      - name: type
+        in: query
+        schema:
+          type: string
+          enum:
+          - json
+          - csv
+        description: Response format.
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      - name: since_id
+        in: query
+        schema:
+          type: integer
+      - name: customer_id
+        in: query
+        schema:
+          type: string
+        description: Filter by LoyaltyLion customer ID.
+      - name: created_at_min
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: created_at_max
+        in: query
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: A paginated list of point transactions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+                  cursors:
+                    $ref: '#/components/schemas/Cursors'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Transaction:
+      type: object
+      description: An immutable addition or removal of points from a customer.
+      properties:
+        id:
+          type: integer
+        customer_id:
+          type: string
+        points:
+          type: integer
+          description: Positive for an addition, negative for a removal.
+        title:
+          type: string
+        reason:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    PointsAdjustment:
+      type: object
+      required:
+      - points
+      properties:
+        points:
+          type: integer
+          minimum: 1
+          maximum: 1000000
+          description: The number of points to add or remove.
+        reason:
+          type: string
+          nullable: true
+          description: A shopper-visible message shown on the customer's page in the LoyaltyLion admin.
+    Cursors:
+      type: object
+      properties:
+        next:
+          type: string
+          nullable: true
+        previous:
+          type: string
+          nullable: true
+  responses:
+    ValidationError:
+      description: The request body failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed or the API key lacks the required scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+      description: Pagination cursor from a previous response.
+    MerchantId:
+      name: merchant_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the customer in your platform or e-commerce store.
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 100
+      description: Maximum results per request.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Program API key passed as a Bearer token in the Authorization header.
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Deprecated token (username) and secret (password) over HTTP Basic auth, supported until 2027-01-10.

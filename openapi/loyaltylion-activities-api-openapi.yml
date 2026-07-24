@@ -1,0 +1,224 @@
+openapi: 3.0.3
+info:
+  title: LoyaltyLion Activities API
+  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program. It is split into an Admin API - for moving data in and out of LoyaltyLion, such as retrieving customers and transactions, tracking orders, and adjusting points - and a Headless API for building custom shopper-facing loyalty experiences in web, mobile, and POS applications. Requests authenticate with a Program API key passed as a Bearer token in the Authorization header (with scoped access such as read_customers), or the deprecated token/secret pair over HTTP Basic auth (supported until 2027-01-10). Customers are addressed by the merchant_id you use in your own platform. All endpoints share a rate limit of 20 requests per second unless otherwise stated. This document grounds the core Customers, Activities, Points, Rewards, and Redemptions resources; some verbs are modeled from the documented resource index and should be verified against the live reference.
+  version: '2.0'
+  contact:
+    name: LoyaltyLion
+    url: https://developers.loyaltylion.com
+servers:
+- url: https://api.loyaltylion.com/v2
+  description: LoyaltyLion v2 API
+security:
+- bearerAuth: []
+- basicAuth: []
+tags:
+- name: Activities
+  description: Customer activities recorded against loyalty rules to award points.
+paths:
+  /activities:
+    get:
+      operationId: listActivities
+      tags:
+      - Activities
+      summary: List activities
+      description: Lists customer activities recorded against loyalty rules.
+      parameters:
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: A paginated list of activities.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Activity'
+                  cursors:
+                    $ref: '#/components/schemas/Cursors'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createActivity
+      tags:
+      - Activities
+      summary: Create an activity
+      description: Records a customer activity against a built-in or custom loyalty rule to award points. Clickthrough rules require a url in properties.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityInput'
+      responses:
+        '200':
+          description: The created activity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /activities/{merchant_id}:
+    parameters:
+    - $ref: '#/components/parameters/MerchantId'
+    put:
+      operationId: updateActivity
+      tags:
+      - Activities
+      summary: Update an activity
+      description: Updates an activity previously created with a merchant_id, for example to void it. Verify the exact verb against the live reference.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityUpdate'
+      responses:
+        '200':
+          description: The updated activity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    ValidationError:
+      description: The request body failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed or the API key lacks the required scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Activity:
+      type: object
+      properties:
+        id:
+          type: integer
+        merchant_id:
+          type: string
+        name:
+          type: string
+        customer_id:
+          type: string
+        customer_email:
+          type: string
+          format: email
+        state:
+          type: string
+        properties:
+          type: object
+          additionalProperties: true
+        created_at:
+          type: string
+          format: date-time
+    ActivityInput:
+      type: object
+      required:
+      - name
+      - customer_id
+      - customer_email
+      properties:
+        name:
+          type: string
+          description: A built-in or custom activity rule name.
+        customer_id:
+          type: string
+          description: A unique ID for the customer involved in the activity.
+        customer_email:
+          type: string
+          format: email
+        properties:
+          type: object
+          additionalProperties: true
+          description: Rule-specific properties. Clickthrough rules must include a url.
+        date:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp; defaults to the current time if omitted.
+        guest:
+          type: boolean
+          default: true
+        merchant_id:
+          type: string
+          description: Your own identifier for the activity, used to update it later.
+        ip_address:
+          type: string
+        user_agent:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    Cursors:
+      type: object
+      properties:
+        next:
+          type: string
+          nullable: true
+        previous:
+          type: string
+          nullable: true
+    ActivityUpdate:
+      type: object
+      properties:
+        state:
+          type: string
+          description: The new state of the activity, for example to void it.
+  parameters:
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+      description: Pagination cursor from a previous response.
+    MerchantId:
+      name: merchant_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the customer in your platform or e-commerce store.
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 100
+      description: Maximum results per request.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Program API key passed as a Bearer token in the Authorization header.
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Deprecated token (username) and secret (password) over HTTP Basic auth, supported until 2027-01-10.

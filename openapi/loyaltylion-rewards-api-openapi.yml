@@ -1,0 +1,154 @@
+openapi: 3.0.3
+info:
+  title: LoyaltyLion Activities Rewards API
+  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program. It is split into an Admin API - for moving data in and out of LoyaltyLion, such as retrieving customers and transactions, tracking orders, and adjusting points - and a Headless API for building custom shopper-facing loyalty experiences in web, mobile, and POS applications. Requests authenticate with a Program API key passed as a Bearer token in the Authorization header (with scoped access such as read_customers), or the deprecated token/secret pair over HTTP Basic auth (supported until 2027-01-10). Customers are addressed by the merchant_id you use in your own platform. All endpoints share a rate limit of 20 requests per second unless otherwise stated. This document grounds the core Customers, Activities, Points, Rewards, and Redemptions resources; some verbs are modeled from the documented resource index and should be verified against the live reference.
+  version: '2.0'
+  contact:
+    name: LoyaltyLion
+    url: https://developers.loyaltylion.com
+servers:
+- url: https://api.loyaltylion.com/v2
+  description: LoyaltyLion v2 API
+security:
+- bearerAuth: []
+- basicAuth: []
+tags:
+- name: Rewards
+  description: Rewards a customer can claim and program reward catalog controls.
+paths:
+  /customers/{merchant_id}/available_rewards:
+    parameters:
+    - $ref: '#/components/parameters/MerchantId'
+    get:
+      operationId: listAvailableRewards
+      tags:
+      - Rewards
+      summary: List available rewards for a customer
+      description: Lists the rewards a given customer can currently claim, optionally filtered by site and country.
+      parameters:
+      - name: site_id
+        in: query
+        schema:
+          type: string
+        description: Filter rewards by a specific site in multi-site programs.
+      - name: country
+        in: query
+        schema:
+          type: string
+        description: ISO 3166-1 alpha-2 country code to filter rewards by location.
+      responses:
+        '200':
+          description: A list of rewards the customer can claim.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Reward'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /rewards/{reward_id}/enable:
+    parameters:
+    - name: reward_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the reward in the program catalog.
+    post:
+      operationId: enableReward
+      tags:
+      - Rewards
+      summary: Enable a reward
+      description: Enables a reward in the program catalog so shoppers can claim it. Verb and path modeled from the documented resource index; verify against the live reference.
+      responses:
+        '200':
+          description: The enabled reward.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reward'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /rewards/{reward_id}/disable:
+    parameters:
+    - name: reward_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the reward in the program catalog.
+    post:
+      operationId: disableReward
+      tags:
+      - Rewards
+      summary: Disable a reward
+      description: Disables a reward in the program catalog so shoppers can no longer claim it. Verb and path modeled from the documented resource index; verify against the live reference.
+      responses:
+        '200':
+          description: The disabled reward.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reward'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed or the API key lacks the required scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Reward:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        points_price:
+          type: integer
+        enabled:
+          type: boolean
+        kind:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  parameters:
+    MerchantId:
+      name: merchant_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the customer in your platform or e-commerce store.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Program API key passed as a Bearer token in the Authorization header.
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Deprecated token (username) and secret (password) over HTTP Basic auth, supported until 2027-01-10.

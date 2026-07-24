@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: LoyaltyLion Activities Utility API
+  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program. It is split into an Admin API - for moving data in and out of LoyaltyLion, such as retrieving customers and transactions, tracking orders, and adjusting points - and a Headless API for building custom shopper-facing loyalty experiences in web, mobile, and POS applications. Requests authenticate with a Program API key passed as a Bearer token in the Authorization header (with scoped access such as read_customers), or the deprecated token/secret pair over HTTP Basic auth (supported until 2027-01-10). Customers are addressed by the merchant_id you use in your own platform. All endpoints share a rate limit of 20 requests per second unless otherwise stated. This document grounds the core Customers, Activities, Points, Rewards, and Redemptions resources; some verbs are modeled from the documented resource index and should be verified against the live reference.
+  version: '2.0'
+  contact:
+    name: LoyaltyLion
+    url: https://developers.loyaltylion.com
+servers:
+- url: https://api.loyaltylion.com/v2
+  description: LoyaltyLion v2 API
+security:
+- bearerAuth: []
+- basicAuth: []
+tags:
+- name: Utility
+  description: Identity and diagnostic endpoints.
+paths:
+  /whoami:
+    get:
+      operationId: whoAmI
+      tags:
+      - Utility
+      summary: Who am I
+      description: Returns the identity and scopes associated with the authenticated API key.
+      responses:
+        '200':
+          description: The authenticated identity.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed or the API key lacks the required scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Program API key passed as a Bearer token in the Authorization header.
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Deprecated token (username) and secret (password) over HTTP Basic auth, supported until 2027-01-10.
