@@ -11,7 +11,20 @@ description: LoyaltyLion is an e-commerce loyalty and rewards platform for Shopi
   apps. Requests authenticate with a Program API key passed as a Bearer token (with
   scoped access), or the deprecated token/secret pair over HTTP Basic auth. All
   endpoints share a 20 requests-per-second rate limit.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/loyaltylion.png
 tags:
 - Loyalty
 - Rewards
@@ -23,95 +36,150 @@ created: '2026-07-10'
 modified: '2026-07-10'
 specificationVersion: '0.19'
 apis:
-- aid: loyaltylion:loyaltylion-customers-api
-  name: LoyaltyLion Customers API
-  tags:
-  - Customers
-  - Loyalty
-  - Profiles
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
-  baseURL: https://api.loyaltylion.com/v2
-  properties:
-  - url: https://developers.loyaltylion.com/api-reference/introduction
-    type: Documentation
-  - url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
-    type: APIReference
-  - url: openapi/loyaltylion-openapi.yml
-    type: OpenAPI
-  description: List and update loyalty customers, read their points balances, tiers,
-    and referral details, and pull the point transactions for an individual customer.
-    Customers are matched by your platform merchant_id and filterable by email and
-    created/updated date ranges with cursor pagination.
 - aid: loyaltylion:loyaltylion-activities-api
   name: LoyaltyLion Activities API
+  description: Customer activities recorded against loyalty rules to award points.
+  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  baseURL: https://api.loyaltylion.com/v2
   tags:
   - Activities
-  - Rules
-  - Engagement
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity
-  baseURL: https://api.loyaltylion.com/v2
   properties:
-  - url: https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity
-    type: APIReference
-  - url: openapi/loyaltylion-openapi.yml
-    type: OpenAPI
-  description: Record customer activities against built-in or custom loyalty rules -
-    signups, clickthroughs, social actions, reviews, and more - to award points.
-    Create, list, and update activities, attaching customer identity, properties,
-    and referral tracking (IP address and user agent).
+  - type: OpenAPI
+    url: openapi/loyaltylion-activities-api-openapi.yml
+  - type: Documentation
+    url: https://developers.loyaltylion.com/api-reference/introduction
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/add-points
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
+- aid: loyaltylion:loyaltylion-customers-api
+  name: LoyaltyLion Customers API
+  description: Loyalty customer profiles, points balances, tiers, and referrals.
+  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  baseURL: https://api.loyaltylion.com/v2
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/loyaltylion-customers-api-openapi.yml
+  - type: Documentation
+    url: https://developers.loyaltylion.com/api-reference/introduction
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/add-points
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
 - aid: loyaltylion:loyaltylion-points-api
   name: LoyaltyLion Points API
+  description: Manual point adjustments and immutable point transactions.
+  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  baseURL: https://api.loyaltylion.com/v2
   tags:
   - Points
-  - Transactions
-  - Balances
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/transactions/list-transactions
-  baseURL: https://api.loyaltylion.com/v2
   properties:
-  - url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/add-points
-    type: APIReference
-  - url: openapi/loyaltylion-openapi.yml
-    type: OpenAPI
-  description: Manually add or remove points from a customer's balance with an optional
-    shopper-visible reason, and list the immutable point transactions that record
-    every addition or removal across the program or for a single customer.
-- aid: loyaltylion:loyaltylion-rewards-api
-  name: LoyaltyLion Rewards API
-  tags:
-  - Rewards
-  - Catalog
-  - Incentives
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards
-  baseURL: https://api.loyaltylion.com/v2
-  properties:
-  - url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards
-    type: APIReference
-  - url: openapi/loyaltylion-openapi.yml
-    type: OpenAPI
-  description: List the rewards a given customer can currently claim - filtered by
-    site and country - and enable or disable rewards in the program catalog to
-    control which incentives shoppers can spend their points on.
+  - type: OpenAPI
+    url: openapi/loyaltylion-points-api-openapi.yml
+  - type: Documentation
+    url: https://developers.loyaltylion.com/api-reference/introduction
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/add-points
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
 - aid: loyaltylion:loyaltylion-redemptions-api
   name: LoyaltyLion Redemptions API
+  description: Claiming and refunding rewards on behalf of a customer.
+  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  baseURL: https://api.loyaltylion.com/v2
   tags:
   - Redemptions
-  - Rewards
-  - Claims
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
-  baseURL: https://api.loyaltylion.com/v2
   properties:
-  - url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
-    type: APIReference
-  - url: openapi/loyaltylion-openapi.yml
-    type: OpenAPI
-  description: Redeem a reward on behalf of a customer - spending their points to
-    create a claimed reward - and refund a previously claimed reward to return the
-    points, supporting multipliers, variants, and headless session attribution.
+  - type: OpenAPI
+    url: openapi/loyaltylion-redemptions-api-openapi.yml
+  - type: Documentation
+    url: https://developers.loyaltylion.com/api-reference/introduction
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/add-points
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
+- aid: loyaltylion:loyaltylion-rewards-api
+  name: LoyaltyLion Rewards API
+  description: Rewards a customer can claim and program reward catalog controls.
+  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  baseURL: https://api.loyaltylion.com/v2
+  tags:
+  - Rewards
+  properties:
+  - type: OpenAPI
+    url: openapi/loyaltylion-rewards-api-openapi.yml
+  - type: Documentation
+    url: https://developers.loyaltylion.com/api-reference/introduction
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/add-points
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
+- aid: loyaltylion:loyaltylion-utility-api
+  name: LoyaltyLion Utility API
+  description: Identity and diagnostic endpoints.
+  humanURL: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  baseURL: https://api.loyaltylion.com/v2
+  tags:
+  - Utility
+  properties:
+  - type: OpenAPI
+    url: openapi/loyaltylion-utility-api-openapi.yml
+  - type: Documentation
+    url: https://developers.loyaltylion.com/api-reference/introduction
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity
+  - type: APIReference
+    url: https://developers.loyaltylion.com/api-reference/v2/resources/customers/add-points
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards
+  - type: APIReference
+    url: >-
+      https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
 common:
 - type: AgenticAccess
   url: agentic-access/loyaltylion-agentic-access.yml
