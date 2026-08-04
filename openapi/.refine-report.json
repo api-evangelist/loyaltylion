@@ -1,0 +1,24 @@
+{
+  "provider": "loyaltylion",
+  "sources": [
+    "loyaltylion-activities-api-openapi.yml",
+    "loyaltylion-customers-api-openapi.yml",
+    "loyaltylion-points-api-openapi.yml",
+    "loyaltylion-redemptions-api-openapi.yml",
+    "loyaltylion-rewards-api-openapi.yml",
+    "loyaltylion-utility-api-openapi.yml"
+  ],
+  "outputs": [
+    "loyaltylion-activities-api-openapi.yml",
+    "loyaltylion-customers-api-openapi.yml",
+    "loyaltylion-points-api-openapi.yml",
+    "loyaltylion-redemptions-api-openapi.yml",
+    "loyaltylion-rewards-api-openapi.yml",
+    "loyaltylion-utility-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
