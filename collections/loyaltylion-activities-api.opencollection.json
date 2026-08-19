@@ -1,0 +1,87 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LoyaltyLion Activities API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Activities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List activities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/activities",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum results per request."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from a previous response."
+              }
+            ]
+          },
+          "docs": "Lists customer activities recorded against loyalty rules."
+        },
+        {
+          "info": {
+            "name": "Create an activity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/activities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Records a customer activity against a built-in or custom loyalty rule to award points. Clickthrough rules require a url in properties."
+        },
+        {
+          "info": {
+            "name": "Update an activity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.loyaltylion.com/v2/activities/:merchant_id",
+            "params": [
+              {
+                "name": "merchant_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the customer in your platform or e-commerce store."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an activity previously created with a merchant_id, for example to void it. Verify the exact verb against the live reference."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

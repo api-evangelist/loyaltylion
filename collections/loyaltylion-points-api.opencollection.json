@@ -1,0 +1,153 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LoyaltyLion Activities Points API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Points",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List a customer's point transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/transactions",
+            "params": [
+              {
+                "name": "merchant_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the customer in your platform or e-commerce store."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum results per request."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from a previous response."
+              }
+            ]
+          },
+          "docs": "Lists the immutable point transactions for a single customer."
+        },
+        {
+          "info": {
+            "name": "Add points to a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/points",
+            "params": [
+              {
+                "name": "merchant_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the customer in your platform or e-commerce store."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Manually adds points to a customer's balance with an optional shopper-visible reason."
+        },
+        {
+          "info": {
+            "name": "Remove points from a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/remove_points",
+            "params": [
+              {
+                "name": "merchant_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the customer in your platform or e-commerce store."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Manually removes points from a customer's balance with an optional shopper-visible reason."
+        },
+        {
+          "info": {
+            "name": "List transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/transactions",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Response format."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum results per request."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from a previous response."
+              },
+              {
+                "name": "since_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by LoyaltyLion customer ID."
+              },
+              {
+                "name": "created_at_min",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at_max",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists point transactions across the program. Each transaction is an immutable addition or removal of points from a customer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

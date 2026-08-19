@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LoyaltyLion Activities Rewards API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Rewards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List available rewards for a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/available_rewards",
+            "params": [
+              {
+                "name": "merchant_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the customer in your platform or e-commerce store."
+              },
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter rewards by a specific site in multi-site programs."
+              },
+              {
+                "name": "country",
+                "value": "",
+                "type": "query",
+                "description": "ISO 3166-1 alpha-2 country code to filter rewards by location."
+              }
+            ]
+          },
+          "docs": "Lists the rewards a given customer can currently claim, optionally filtered by site and country."
+        },
+        {
+          "info": {
+            "name": "Enable a reward",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/rewards/:reward_id/enable",
+            "params": [
+              {
+                "name": "reward_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the reward in the program catalog."
+              }
+            ]
+          },
+          "docs": "Enables a reward in the program catalog so shoppers can claim it. Verb and path modeled from the documented resource index; verify against the live reference."
+        },
+        {
+          "info": {
+            "name": "Disable a reward",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/rewards/:reward_id/disable",
+            "params": [
+              {
+                "name": "reward_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the reward in the program catalog."
+              }
+            ]
+          },
+          "docs": "Disables a reward in the program catalog so shoppers can no longer claim it. Verb and path modeled from the documented resource index; verify against the live reference."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

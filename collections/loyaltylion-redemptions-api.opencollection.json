@@ -1,0 +1,72 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LoyaltyLion Activities Redemptions API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Redemptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Redeem a reward",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/claimed_rewards",
+            "params": [
+              {
+                "name": "merchant_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the customer in your platform or e-commerce store."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Redeems a reward on behalf of a customer, spending their points to create a claimed reward."
+        },
+        {
+          "info": {
+            "name": "Refund a claimed reward",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id/claimed_rewards/:claimed_reward_id/refund",
+            "params": [
+              {
+                "name": "merchant_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the customer in your platform or e-commerce store."
+              },
+              {
+                "name": "claimed_reward_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the claimed reward to refund."
+              }
+            ]
+          },
+          "docs": "Refunds a previously claimed reward, returning the spent points to the customer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

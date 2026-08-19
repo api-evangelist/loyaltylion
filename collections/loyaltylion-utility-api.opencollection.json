@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LoyaltyLion Activities Utility API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Utility",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Who am I",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/whoami"
+          },
+          "docs": "Returns the identity and scopes associated with the authenticated API key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

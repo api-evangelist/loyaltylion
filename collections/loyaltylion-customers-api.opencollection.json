@@ -1,0 +1,114 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LoyaltyLion Activities Customers API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Customers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List customers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.loyaltylion.com/v2/customers",
+            "params": [
+              {
+                "name": "since_id",
+                "value": "",
+                "type": "query",
+                "description": "Return resources with an ID greater than this value."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum results per request."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from a previous response."
+              },
+              {
+                "name": "sort_field",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort_direction",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "Filter by email substring match."
+              },
+              {
+                "name": "created_at_min",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_at_max",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "updated_at_min",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "updated_at_max",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists loyalty customers. Supports cursor pagination and filtering by email substring and created/updated date ranges. Requires a key with the read_customers scope."
+        },
+        {
+          "info": {
+            "name": "Update a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.loyaltylion.com/v2/customers/:merchant_id",
+            "params": [
+              {
+                "name": "merchant_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the customer in your platform or e-commerce store."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a loyalty customer, for example setting their date of birth or other profile attributes. Verify the exact verb against the live reference."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
