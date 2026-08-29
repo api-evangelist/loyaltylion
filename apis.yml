@@ -11,6 +11,18 @@ description: LoyaltyLion is an e-commerce loyalty and rewards platform for Shopi
   apps. Requests authenticate with a Program API key passed as a Bearer token (with
   scoped access), or the deprecated token/secret pair over HTTP Basic auth. All
   endpoints share a 20 requests-per-second rate limit.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
