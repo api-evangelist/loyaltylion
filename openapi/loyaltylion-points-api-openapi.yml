@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: LoyaltyLion Activities Points API
-  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program. It is split into an Admin API - for moving data in and out of LoyaltyLion, such as retrieving customers and transactions, tracking orders, and adjusting points - and a Headless API for building custom shopper-facing loyalty experiences in web, mobile, and POS applications. Requests authenticate with a Program API key passed as a Bearer token in the Authorization header (with scoped access such as read_customers), or the deprecated token/secret pair over HTTP Basic auth (supported until 2027-01-10). Customers are addressed by the merchant_id you use in your own platform. All endpoints share a rate limit of 20 requests per second unless otherwise stated. This document grounds the core Customers, Activities, Points, Rewards, and Redemptions resources; some verbs are modeled from the documented resource index and should be verified against the live reference.
+  title: LoyaltyLion Points API
+  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program.
   version: '2.0'
   contact:
     name: LoyaltyLion
@@ -150,6 +150,29 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 100
+      description: Maximum results per request.
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+      description: Pagination cursor from a previous response.
+    MerchantId:
+      name: merchant_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the customer in your platform or e-commerce store.
   schemas:
     Transaction:
       type: object
@@ -165,8 +188,9 @@ components:
         title:
           type: string
         reason:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         created_at:
           type: string
           format: date-time
@@ -177,6 +201,17 @@ components:
           type: string
         message:
           type: string
+    Cursors:
+      type: object
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
     PointsAdjustment:
       type: object
       required:
@@ -188,18 +223,10 @@ components:
           maximum: 1000000
           description: The number of points to add or remove.
         reason:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: A shopper-visible message shown on the customer's page in the LoyaltyLion admin.
-    Cursors:
-      type: object
-      properties:
-        next:
-          type: string
-          nullable: true
-        previous:
-          type: string
-          nullable: true
   responses:
     ValidationError:
       description: The request body failed validation.
@@ -213,29 +240,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    Cursor:
-      name: cursor
-      in: query
-      schema:
-        type: string
-      description: Pagination cursor from a previous response.
-    MerchantId:
-      name: merchant_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The ID of the customer in your platform or e-commerce store.
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 500
-        default: 100
-      description: Maximum results per request.
   securitySchemes:
     bearerAuth:
       type: http

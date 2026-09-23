@@ -1,0 +1,1 @@
+{"resource":"https://api.loyaltylion.com/mcp","authorization_servers":["https://api.loyaltylion.com"],"scopes_supported":["read_audit_log","read_customers","read_orders"],"bearer_methods_supported":["header"],"resource_name":"LoyaltyLion Merchant MCP"}

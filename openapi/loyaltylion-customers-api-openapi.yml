@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: LoyaltyLion Activities Customers API
-  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program. It is split into an Admin API - for moving data in and out of LoyaltyLion, such as retrieving customers and transactions, tracking orders, and adjusting points - and a Headless API for building custom shopper-facing loyalty experiences in web, mobile, and POS applications. Requests authenticate with a Program API key passed as a Bearer token in the Authorization header (with scoped access such as read_customers), or the deprecated token/secret pair over HTTP Basic auth (supported until 2027-01-10). Customers are addressed by the merchant_id you use in your own platform. All endpoints share a rate limit of 20 requests per second unless otherwise stated. This document grounds the core Customers, Activities, Points, Rewards, and Redemptions resources; some verbs are modeled from the documented resource index and should be verified against the live reference.
+  title: LoyaltyLion Customers API
+  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program.
   version: '2.0'
   contact:
     name: LoyaltyLion
@@ -138,30 +138,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
-    Cursors:
-      type: object
-      properties:
-        next:
-          type: string
-          nullable: true
-        previous:
-          type: string
-          nullable: true
-    CustomerInput:
-      type: object
-      properties:
-        date_of_birth:
-          type: string
-          format: date
-        merchant_id:
-          type: string
     Customer:
       type: object
       properties:
@@ -189,6 +165,32 @@ components:
         updated_at:
           type: string
           format: date-time
+    CustomerInput:
+      type: object
+      properties:
+        date_of_birth:
+          type: string
+          format: date
+        merchant_id:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    Cursors:
+      type: object
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
   parameters:
     MerchantId:
       name: merchant_id

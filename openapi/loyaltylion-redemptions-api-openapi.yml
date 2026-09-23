@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: LoyaltyLion Activities Redemptions API
-  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program. It is split into an Admin API - for moving data in and out of LoyaltyLion, such as retrieving customers and transactions, tracking orders, and adjusting points - and a Headless API for building custom shopper-facing loyalty experiences in web, mobile, and POS applications. Requests authenticate with a Program API key passed as a Bearer token in the Authorization header (with scoped access such as read_customers), or the deprecated token/secret pair over HTTP Basic auth (supported until 2027-01-10). Customers are addressed by the merchant_id you use in your own platform. All endpoints share a rate limit of 20 requests per second unless otherwise stated. This document grounds the core Customers, Activities, Points, Rewards, and Redemptions resources; some verbs are modeled from the documented resource index and should be verified against the live reference.
+  title: LoyaltyLion Redemptions API
+  description: The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program.
   version: '2.0'
   contact:
     name: LoyaltyLion
@@ -70,14 +70,14 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   responses:
-    ValidationError:
-      description: The request body failed validation.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    ValidationError:
+      description: The request body failed validation.
       content:
         application/json:
           schema:
@@ -89,13 +89,22 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    ClaimedReward:
       type: object
       properties:
-        error:
+        id:
+          type: integer
+        reward_id:
+          type: integer
+        customer_id:
           type: string
-        message:
+        points_spent:
+          type: integer
+        state:
           type: string
+        created_at:
+          type: string
+          format: date-time
     RedeemRewardInput:
       type: object
       required:
@@ -120,22 +129,13 @@ components:
               type: string
             token:
               type: string
-    ClaimedReward:
+    Error:
       type: object
       properties:
-        id:
-          type: integer
-        reward_id:
-          type: integer
-        customer_id:
+        error:
           type: string
-        points_spent:
-          type: integer
-        state:
+        message:
           type: string
-        created_at:
-          type: string
-          format: date-time
   parameters:
     MerchantId:
       name: merchant_id
