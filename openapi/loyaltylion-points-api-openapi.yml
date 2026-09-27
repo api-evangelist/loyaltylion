@@ -150,6 +150,19 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    ValidationError:
+      description: The request body failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed or the API key lacks the required scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     Limit:
       name: limit
@@ -194,13 +207,6 @@ components:
         created_at:
           type: string
           format: date-time
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
     Cursors:
       type: object
       properties:
@@ -212,6 +218,13 @@ components:
           type:
           - string
           - 'null'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
     PointsAdjustment:
       type: object
       required:
@@ -227,19 +240,6 @@ components:
           - string
           - 'null'
           description: A shopper-visible message shown on the customer's page in the LoyaltyLion admin.
-  responses:
-    ValidationError:
-      description: The request body failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication failed or the API key lacks the required scope.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
