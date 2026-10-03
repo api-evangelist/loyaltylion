@@ -125,14 +125,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    CustomerInput:
-      type: object
-      properties:
-        date_of_birth:
-          type: string
-          format: date
-        merchant_id:
-          type: string
     Customer:
       type: object
       properties:
@@ -177,6 +169,14 @@ components:
         error:
           type: string
         message:
+          type: string
+    CustomerInput:
+      type: object
+      properties:
+        date_of_birth:
+          type: string
+          format: date
+        merchant_id:
           type: string
   responses:
     Unauthorized:

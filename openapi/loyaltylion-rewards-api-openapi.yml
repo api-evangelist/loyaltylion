@@ -101,27 +101,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    Unauthorized:
-      description: Authentication failed or the API key lacks the required scope.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    MerchantId:
-      name: merchant_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The ID of the customer in your platform or e-commerce store.
   schemas:
     Reward:
       type: object
@@ -143,6 +122,27 @@ components:
           type: string
         message:
           type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed or the API key lacks the required scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    MerchantId:
+      name: merchant_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the customer in your platform or e-commerce store.
   securitySchemes:
     bearerAuth:
       type: http
