@@ -115,12 +115,6 @@ components:
         created_at:
           type: string
           format: date-time
-    ActivityUpdate:
-      type: object
-      properties:
-        state:
-          type: string
-          description: The new state of the activity, for example to void it.
     Cursors:
       type: object
       properties:
@@ -173,38 +167,15 @@ components:
           type: string
         user_agent:
           type: string
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 500
-        default: 100
-      description: Maximum results per request.
-    Cursor:
-      name: cursor
-      in: query
-      schema:
-        type: string
-      description: Pagination cursor from a previous response.
-    MerchantId:
-      name: merchant_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The ID of the customer in your platform or e-commerce store.
+    ActivityUpdate:
+      type: object
+      properties:
+        state:
+          type: string
+          description: The new state of the activity, for example to void it.
   responses:
     Unauthorized:
       description: Authentication failed or the API key lacks the required scope.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    ValidationError:
-      description: The request body failed validation.
       content:
         application/json:
           schema:
@@ -215,6 +186,35 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request body failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+      description: Pagination cursor from a previous response.
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 100
+      description: Maximum results per request.
+    MerchantId:
+      name: merchant_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the customer in your platform or e-commerce store.
   securitySchemes:
     bearerAuth:
       type: http

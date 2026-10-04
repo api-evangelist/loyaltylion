@@ -76,14 +76,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    ValidationError:
-      description: The request body failed validation.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    ValidationError:
+      description: The request body failed validation.
       content:
         application/json:
           schema:
@@ -96,22 +96,6 @@ components:
           type: string
         message:
           type: string
-    ClaimedReward:
-      type: object
-      properties:
-        id:
-          type: integer
-        reward_id:
-          type: integer
-        customer_id:
-          type: string
-        points_spent:
-          type: integer
-        state:
-          type: string
-        created_at:
-          type: string
-          format: date-time
     RedeemRewardInput:
       type: object
       required:
@@ -136,6 +120,22 @@ components:
               type: string
             token:
               type: string
+    ClaimedReward:
+      type: object
+      properties:
+        id:
+          type: integer
+        reward_id:
+          type: integer
+        customer_id:
+          type: string
+        points_spent:
+          type: integer
+        state:
+          type: string
+        created_at:
+          type: string
+          format: date-time
   parameters:
     MerchantId:
       name: merchant_id

@@ -151,21 +151,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    PointsAdjustment:
-      type: object
-      required:
-      - points
-      properties:
-        points:
-          type: integer
-          minimum: 1
-          maximum: 1000000
-          description: The number of points to add or remove.
-        reason:
-          type:
-          - string
-          - 'null'
-          description: A shopper-visible message shown on the customer's page in the LoyaltyLion admin.
     Cursors:
       type: object
       properties:
@@ -177,13 +162,6 @@ components:
           type:
           - string
           - 'null'
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
     Transaction:
       type: object
       description: An immutable addition or removal of points from a customer.
@@ -204,29 +182,28 @@ components:
         created_at:
           type: string
           format: date-time
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 500
-        default: 100
-      description: Maximum results per request.
-    Cursor:
-      name: cursor
-      in: query
-      schema:
-        type: string
-      description: Pagination cursor from a previous response.
-    MerchantId:
-      name: merchant_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The ID of the customer in your platform or e-commerce store.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    PointsAdjustment:
+      type: object
+      required:
+      - points
+      properties:
+        points:
+          type: integer
+          minimum: 1
+          maximum: 1000000
+          description: The number of points to add or remove.
+        reason:
+          type:
+          - string
+          - 'null'
+          description: A shopper-visible message shown on the customer's page in the LoyaltyLion admin.
   responses:
     Unauthorized:
       description: Authentication failed or the API key lacks the required scope.
@@ -240,6 +217,29 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+      description: Pagination cursor from a previous response.
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 100
+      description: Maximum results per request.
+    MerchantId:
+      name: merchant_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the customer in your platform or e-commerce store.
   securitySchemes:
     bearerAuth:
       type: http

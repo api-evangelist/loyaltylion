@@ -101,27 +101,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  schemas:
-    Reward:
-      type: object
-      properties:
-        id:
-          type: integer
-        title:
-          type: string
-        points_price:
-          type: integer
-        enabled:
-          type: boolean
-        kind:
-          type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
   responses:
     Unauthorized:
       description: Authentication failed or the API key lacks the required scope.
@@ -135,6 +114,27 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    Reward:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        points_price:
+          type: integer
+        enabled:
+          type: boolean
+        kind:
+          type: string
   parameters:
     MerchantId:
       name: merchant_id

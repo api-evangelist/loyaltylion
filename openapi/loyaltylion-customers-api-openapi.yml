@@ -125,6 +125,24 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    Cursors:
+      type: object
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
     Customer:
       type: object
       properties:
@@ -152,24 +170,6 @@ components:
         updated_at:
           type: string
           format: date-time
-    Cursors:
-      type: object
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
     CustomerInput:
       type: object
       properties:
