@@ -37,6 +37,9 @@ accessModel:
   generated: '2026-07-22'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/loyaltylion.png
+x-docs-platform: mintlify
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
 tags:
 - Loyalty
 - Rewards
@@ -202,6 +205,9 @@ apis:
     url: >-
       https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
 common:
+- type: CapabilityMap
+  url: capabilities/loyaltylion-capability-edges.yml
+  name: LoyaltyLion Business Capability Map
 - type: AgenticAccess
   url: agentic-access/loyaltylion-agentic-access.yml
 - type: DomainSecurity
