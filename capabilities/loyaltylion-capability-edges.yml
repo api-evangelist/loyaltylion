@@ -1,0 +1,54 @@
+slug: loyaltylion
+provider: LoyaltyLion
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: Points
+  spec_file: loyaltylion-points-api-openapi.yml
+  capability_id: BC-420.40
+  capability_id_l1: BC-420
+  capability_name: Loyalty & Retention Management
+  confidence: 0.9
+  evidence: '"Add points to a customer", "Remove points from a customer", "List a customer''s point transactions"'
+  reason: Direct administration of loyalty point balances and point transaction ledgers - unambiguously
+    loyalty programme management.
+- tag: Redemptions
+  spec_file: loyaltylion-redemptions-api-openapi.yml
+  capability_id: BC-420.40
+  capability_id_l1: BC-420
+  capability_name: Loyalty & Retention Management
+  confidence: 0.9
+  evidence: '"Redeem a reward", "Refund a claimed reward" with schema ClaimedReward'
+  reason: Reward redemption and reversal against a customer's loyalty account is the core execution of
+    a loyalty and rewards programme.
+- tag: Rewards
+  spec_file: loyaltylion-rewards-api-openapi.yml
+  capability_id: BC-420.40
+  capability_id_l1: BC-420
+  capability_name: Loyalty & Retention Management
+  confidence: 0.88
+  evidence: GET /customers/{merchant_id}/available_rewards  List available rewards for a customer; POST
+    /rewards/{reward_id}/enable  Enable a reward
+  reason: Operations manage rewards available to customers within a loyalty/points programme, which is
+    Loyalty & Retention Management.
+- tag: Activities
+  spec_file: loyaltylion-activities-api-openapi.yml
+  capability_id: BC-420.40
+  capability_id_l1: BC-420
+  capability_name: Loyalty & Retention Management
+  confidence: 0.75
+  evidence: '"The LoyaltyLion v2 REST API powers an e-commerce loyalty and rewards program"; operations
+    "List activities" / "Create an activity"'
+  reason: Activities are the point-earning customer actions recorded in the loyalty programme, so the
+    surface realises loyalty programme operation. Some residual ambiguity about whether 'activity' is
+    a programme event or a generic audit record.
