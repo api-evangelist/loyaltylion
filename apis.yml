@@ -57,7 +57,7 @@ tags_raw:
 - Retention
 - Loyalty & Incentives
 created: '2026-07-10'
-modified: '2026-07-10'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
 - aid: loyaltylion:loyaltylion-activities-api
@@ -205,6 +205,8 @@ apis:
     url: >-
       https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward
 common:
+- url: https://loyaltylion.com/blog
+  type: Blog
 - type: CapabilityMap
   url: capabilities/loyaltylion-capability-edges.yml
   name: LoyaltyLion Business Capability Map
