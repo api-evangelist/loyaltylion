@@ -69,13 +69,15 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    MerchantId:
+      name: merchant_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the customer in your platform or e-commerce store.
   responses:
-    Unauthorized:
-      description: Authentication failed or the API key lacks the required scope.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: The requested resource was not found.
       content:
@@ -88,14 +90,29 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed or the API key lacks the required scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    ClaimedReward:
       type: object
       properties:
-        error:
+        id:
+          type: integer
+        reward_id:
+          type: integer
+        customer_id:
           type: string
-        message:
+        points_spent:
+          type: integer
+        state:
           type: string
+        created_at:
+          type: string
+          format: date-time
     RedeemRewardInput:
       type: object
       required:
@@ -120,30 +137,13 @@ components:
               type: string
             token:
               type: string
-    ClaimedReward:
+    Error:
       type: object
       properties:
-        id:
-          type: integer
-        reward_id:
-          type: integer
-        customer_id:
+        error:
           type: string
-        points_spent:
-          type: integer
-        state:
+        message:
           type: string
-        created_at:
-          type: string
-          format: date-time
-  parameters:
-    MerchantId:
-      name: merchant_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The ID of the customer in your platform or e-commerce store.
   securitySchemes:
     bearerAuth:
       type: http

@@ -124,6 +124,14 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    MerchantId:
+      name: merchant_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The ID of the customer in your platform or e-commerce store.
   schemas:
     Cursors:
       type: object
@@ -136,12 +144,13 @@ components:
           type:
           - string
           - 'null'
-    Error:
+    CustomerInput:
       type: object
       properties:
-        error:
+        date_of_birth:
           type: string
-        message:
+          format: date
+        merchant_id:
           type: string
     Customer:
       type: object
@@ -170,35 +179,26 @@ components:
         updated_at:
           type: string
           format: date-time
-    CustomerInput:
+    Error:
       type: object
       properties:
-        date_of_birth:
+        error:
           type: string
-          format: date
-        merchant_id:
+        message:
           type: string
   responses:
-    Unauthorized:
-      description: Authentication failed or the API key lacks the required scope.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: The requested resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    MerchantId:
-      name: merchant_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: The ID of the customer in your platform or e-commerce store.
+    Unauthorized:
+      description: Authentication failed or the API key lacks the required scope.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
