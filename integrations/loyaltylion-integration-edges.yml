@@ -6,14 +6,32 @@ source:
 - https://composio.dev/toolkits/loyaltylion
 - https://monid.ai/tools/loyaltylion
 checked:
+- gorgias/integrations/gorgias-integration-edges.yml
 - https://composio.dev/toolkits/loyaltylion
 - https://monid.ai/tools/loyaltylion
 - https://n8n.io/integrations/loyaltylion/
 - https://zapier.com/apps/loyaltylion/integrations
 - shopify/integrations/shopify-integration-edges.yml
+- zendesk/integrations/zendesk-integration-edges.yml
 summary: null
 marketplace_apps: []
 edges:
+- partner_name: Gorgias (own)
+  partner: gorgias
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.gorgias.com/apps/loyaltylion
+  mirror_of: gorgias/integrations/gorgias-integration-edges.yml
+  apps:
+  - LoyaltyLion
+  listing_count: 1
+  detected: '2026-10-20'
+  detected_by: mirror-platform-listings.py
 - partner_name: Shopify (own)
   partner: shopify
   partner_match: mirror
@@ -32,4 +50,21 @@ edges:
   detected_by: mirror-platform-listings.py
   publisher_verified:
   - Built for Shopify
+- partner_name: Zendesk (own)
+  partner: zendesk
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.zendesk.com/marketplace/apps/support/195330/loyaltylion/
+  mirror_of: zendesk/integrations/zendesk-integration-edges.yml
+  apps:
+  - LoyaltyLion
+  listing_count: 1
+  detected: '2026-10-20'
+  detected_by: mirror-platform-listings.py
+  category: eComm and Payments
 templates: []
