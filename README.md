@@ -1,4 +1,4 @@
-# LoyaltyLion (loyaltylion)
+# LoyaltyLion
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,146 +64,135 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-LoyaltyLion is an e-commerce loyalty and rewards platform for Shopify, BigCommerce, and custom storefronts, letting merchants run points, referrals, VIP tiers, and reward programs. Its v2 REST API (base `https://api.loyaltylion.com/v2`) is split into an **Admin API** - for moving data in and out of LoyaltyLion, such as retrieving customers and transactions, tracking orders, and adjusting points - and a **Headless API** for building custom shopper-facing loyalty experiences in web, mobile, and POS applications. All endpoints share a documented rate limit of 20 requests per second.
+LoyaltyLion is an e-commerce loyalty and rewards platform for Shopify, BigCommerce, and custom storefronts, letting merchants run points, referrals, VIP tiers, and reward programs. Its v2 REST API (base https://api.loyaltylion.com/v2) is split into an Admin API for moving data in and out of LoyaltyLion - retrieving customers and transactions, tracking orders, and adjusting points - and a Headless API for building custom shopper-facing loyalty experiences in web, mobile, and POS apps. Requests authenticate with a Program API key passed as a Bearer token (with scoped access), or the deprecated token/secret pair over HTTP Basic auth. All endpoints share a 20 requests-per-second rate limit.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/loyaltylion/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/loyaltylion/refs/heads/main/apis.yml)
+**Areas:** Loyalty · Rewards · E-Commerce · Points · Shopify · Retention · Loyalty & Incentives
 
-## Access Model
+## LoyaltyLion on APIs.io
 
-LoyaltyLion is a **commercial SaaS platform** (not open source). The API is a platform capability of a paid LoyaltyLion program rather than a separately metered product:
+Everything profiled for LoyaltyLion is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/loyaltylion/](https://apis.io/providers/loyaltylion/)** — or go straight to one of the APIs or properties below.
 
-- **Authentication:** Modern access uses a **Program API key** passed as a `Bearer` token in the `Authorization` header, with scoped permissions (for example `read_customers`). Keys are generated per program in the LoyaltyLion admin and cannot be viewed again after creation. OAuth is also offered. A **deprecated token/secret** pair over HTTP Basic auth (RFC 2617) remains supported only until **2027-01-10**.
-- **Customer addressing:** Customers are addressed by the `merchant_id` you use in your own platform or e-commerce store.
-- **Pricing / plan-gating:** Billing is tied to average **monthly order volume**, not API calls - a Free tier (up to ~400 orders/month), a published Classic tier from **$199/month** (500 orders), and custom-quoted **Advanced** and **Plus** tiers. Full Admin/Headless API access is generally associated with higher tiers; the exact plan-to-API-scope mapping is not fully published and should be confirmed with LoyaltyLion.
-- **Async delivery:** There is **no public WebSocket API**. Event-driven delivery is provided by outbound **webhooks** - merchants register callback URLs and LoyaltyLion POSTs loyalty events to them.
+### APIs (6)
 
-## Tags
+- [LoyaltyLion Activities API](https://apis.io/apis/loyaltylion/loyaltylion-activities-api/) — Customer activities recorded against loyalty rules to award points.
+- [LoyaltyLion Customers API](https://apis.io/apis/loyaltylion/loyaltylion-customers-api/) — Loyalty customer profiles, points balances, tiers, and referrals.
+- [LoyaltyLion Points API](https://apis.io/apis/loyaltylion/loyaltylion-points-api/) — Manual point adjustments and immutable point transactions.
+- [LoyaltyLion Redemptions API](https://apis.io/apis/loyaltylion/loyaltylion-redemptions-api/) — Claiming and refunding rewards on behalf of a customer.
+- [LoyaltyLion Rewards API](https://apis.io/apis/loyaltylion/loyaltylion-rewards-api/) — Rewards a customer can claim and program reward catalog controls.
+- [LoyaltyLion Utility API](https://apis.io/apis/loyaltylion/loyaltylion-utility-api/) — Identity and diagnostic endpoints.
 
-- Loyalty
-- Rewards
-- E-commerce
-- Points
-- Shopify
-- Retention
+### Published properties
 
-## Timestamps
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-- **Created:** 2026-07-10
-- **Modified:** 2026-07-10
+#### MCP servers (1)
 
-## APIs
+Model Context Protocol servers that expose the API to agents.
 
-### LoyaltyLion Customers API
+- [loyaltylion](https://apis.io/servers/loyaltylion/loyaltylion/)
 
-List and update loyalty customers, read their points balances, tiers, and referral details, and pull the point transactions for an individual customer. Customers are matched by your platform `merchant_id` and filterable by email and created/updated date ranges with cursor pagination.
+#### Agentic access (1)
 
-- **Human URL:** [https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers](https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers)
-- **Base URL:** `https://api.loyaltylion.com/v2`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Loyaltylion Agentic Access](https://apis.io/agentic-access/loyaltylion/loyaltylion-agentic-access/)
 
-- Customers
-- Loyalty
-- Profiles
+#### Collections (7)
 
-#### Properties
+Postman and Open Collection request collections.
 
-- [Documentation](https://developers.loyaltylion.com/api-reference/introduction)
-- [API Reference](https://developers.loyaltylion.com/api-reference/v2/resources/customers/list-customers)
-- [OpenAPI](openapi/loyaltylion-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/loyaltylion.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/loyaltylion.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [LoyaltyLion API](https://apis.io/collections/loyaltylion/open-loyaltylion/)
+- [LoyaltyLion Activities API](https://apis.io/collections/loyaltylion/open-loyaltylion-activities-api/)
+- [LoyaltyLion Activities Customers API](https://apis.io/collections/loyaltylion/open-loyaltylion-customers-api/)
+- [LoyaltyLion Activities Points API](https://apis.io/collections/loyaltylion/open-loyaltylion-points-api/)
+- [LoyaltyLion Activities Redemptions API](https://apis.io/collections/loyaltylion/open-loyaltylion-redemptions-api/)
+- [LoyaltyLion Activities Rewards API](https://apis.io/collections/loyaltylion/open-loyaltylion-rewards-api/)
+- [LoyaltyLion Activities Utility API](https://apis.io/collections/loyaltylion/open-loyaltylion-utility-api/)
 
-### LoyaltyLion Activities API
+#### Security (2)
 
-Record customer activities against built-in or custom loyalty rules - signups, clickthroughs, social actions, reviews, and more - to award points. Create, list, and update activities, attaching customer identity, properties, and referral tracking (IP address and user agent).
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity](https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity)
-- **Base URL:** `https://api.loyaltylion.com/v2`
+- [Loyaltylion Authentication](https://apis.io/security/loyaltylion/loyaltylion-authentication/)
+- [Loyaltylion Domain Security](https://apis.io/security/loyaltylion/loyaltylion-domain-security/)
 
-#### Tags
+#### Plans and pricing (1)
 
-- Activities
-- Rules
-- Engagement
+Published plans, tiers and prices.
 
-#### Properties
+- [Loyaltylion Plans Pricing](https://apis.io/plans/loyaltylion/loyaltylion-plans-pricing/)
 
-- [API Reference](https://developers.loyaltylion.com/api-reference/v2/resources/activities/create-activity)
-- [OpenAPI](openapi/loyaltylion-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/loyaltylion.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/loyaltylion.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Rate limits (1)
 
-### LoyaltyLion Points API
+Published request limits.
 
-Manually add or remove points from a customer's balance with an optional shopper-visible reason, and list the immutable point transactions that record every addition or removal across the program or for a single customer.
+- [Loyaltylion Rate Limits](https://apis.io/rate-limits/loyaltylion/loyaltylion-rate-limits/)
 
-- **Human URL:** [https://developers.loyaltylion.com/api-reference/v2/resources/transactions/list-transactions](https://developers.loyaltylion.com/api-reference/v2/resources/transactions/list-transactions)
-- **Base URL:** `https://api.loyaltylion.com/v2`
+#### FinOps (1)
 
-#### Tags
+What the API costs to run, by operation.
 
-- Points
-- Transactions
-- Balances
+- [Loyaltylion Finops](https://apis.io/finops/loyaltylion/loyaltylion-finops/)
 
-#### Properties
+## Where to find this API
 
-- [API Reference](https://developers.loyaltylion.com/api-reference/v2/resources/customers/add-points)
-- [OpenAPI](openapi/loyaltylion-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/loyaltylion.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/loyaltylion.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### LoyaltyLion Rewards API
-
-List the rewards a given customer can currently claim - filtered by site and country - and enable or disable rewards in the program catalog to control which incentives shoppers can spend their points on.
-
-- **Human URL:** [https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards](https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards)
-- **Base URL:** `https://api.loyaltylion.com/v2`
-
-#### Tags
-
-- Rewards
-- Catalog
-- Incentives
-
-#### Properties
-
-- [API Reference](https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/list-available-rewards)
-- [OpenAPI](openapi/loyaltylion-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/loyaltylion.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/loyaltylion.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### LoyaltyLion Redemptions API
-
-Redeem a reward on behalf of a customer - spending their points to create a claimed reward - and refund a previously claimed reward to return the points, supporting multipliers, variants, and headless session attribution.
-
-- **Human URL:** [https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward](https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward)
-- **Base URL:** `https://api.loyaltylion.com/v2`
-
-#### Tags
-
-- Redemptions
-- Rewards
-- Claims
-
-#### Properties
-
-- [API Reference](https://developers.loyaltylion.com/api-reference/v2/resources/customers/rewards/redeem-reward)
-- [OpenAPI](openapi/loyaltylion-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/loyaltylion.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/loyaltylion.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [LinkedIn](https://www.linkedin.com/company/loyaltylion)
 - [Website](https://loyaltylion.com)
 - [Documentation](https://developers.loyaltylion.com)
-- [Plans](plans/loyaltylion-plans-pricing.yml)
-- [Rate Limits](rate-limits/loyaltylion-rate-limits.yml)
-- [Fin Ops](finops/loyaltylion-finops.yml)
+- [Blog](https://loyaltylion.com/blog)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 24.6** — emerging · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 68.3 |
+| Contract quality | 42.1 |
+| Contract governance | 0.0 |
+| Operational transparency | 5.3 |
+| Developer ergonomics | 31.0 |
+| Access clarity | 7.9 |
+
+**Agent readiness 41.7** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 11.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/loyaltylion/](https://apis.io/providers/loyaltylion/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for LoyaltyLion: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/loyaltylion/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
